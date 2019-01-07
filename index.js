@@ -1,8 +1,7 @@
 var express =require('express');
 var socket= require('socket.io');
 var mongoclient= require('mongodb').MongoClient;
-//var url= "mongodb://gurcharan:gurcharan99@ds215502.mlab.com:15502/mymongodb";
-var url="mongodb://localhost/mymongodb";
+var url= "mongodb://public:public2all@ds215502.mlab.com:15502/mymongodb";
 var app= express();
 
 var server =app.listen(4000,function(){
@@ -11,6 +10,7 @@ var server =app.listen(4000,function(){
 });
 
 var io= socket(server);
+app.use(express.static('public'));
 
 mongoclient.connect(url,{useNewUrlParser:true},function(err,db){
     if(err){
@@ -18,31 +18,10 @@ mongoclient.connect(url,{useNewUrlParser:true},function(err,db){
     }
     
     var dbo=db.db("mymongodb");
-    
-    /*dbo.createCollection("chatdata",function(err,res){
-        if(err){
-            throw err;
-        }
-        console.log('chatdata collection created');
-      
-        db.close();
-
-    });*/
-      
-    //db.close();
  
     io.on('connection',function(socket){
         console.log('made socket connection');
         var chat=dbo.collection("chatdata");
-        /*
-        dbo.collection('chatdata').drop(function(err,delOk){
-            if(err) throw err;
-            if(delOk){
-                console.log("deleted collection");
-            }
-         
-        });
-       */
 
         chat.find({}).toArray(function(err,collection){
             
@@ -55,8 +34,6 @@ mongoclient.connect(url,{useNewUrlParser:true},function(err,db){
                 socket.emit('output',collection);
                 //console.log("i get all data"+collection[0].msg);
             }
-           // var cursor=chat.find({});
-            //console.log(cursor);
 
         });
         
@@ -65,7 +42,6 @@ mongoclient.connect(url,{useNewUrlParser:true},function(err,db){
 
             chat.insertOne({name:data.sender,msg:data.msg},function(){
                 console.log("datainserted"+data.msg+" "+data.sender);
-                //io.sockets.emit('chat',data);
                 socket.broadcast.emit('chat',data);
             
             });
@@ -93,7 +69,7 @@ mongoclient.connect(url,{useNewUrlParser:true},function(err,db){
    
 });
    
-app.use(express.static('public'));
+
 
 
 
