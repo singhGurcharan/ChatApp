@@ -3,8 +3,9 @@ var socket= require('socket.io');
 var mongoclient= require('mongodb').MongoClient;
 var url= "mongodb://public:public2all@ds215502.mlab.com:15502/mymongodb";
 var app= express();
+var Port=process.env.Port || 4000;
 
-var server =app.listen(4000,function(){
+var server =app.listen(Port,function(){
 
     console.log("listing to port 4000");
 });

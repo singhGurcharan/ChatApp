@@ -1,5 +1,5 @@
 
-var socket = io.connect('http://localhost:4000');
+var socket = io.connect();
 
 var msg=document.getElementById('msg');
 var innerbox=document.getElementById('innerbox');
