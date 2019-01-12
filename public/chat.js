@@ -1,5 +1,5 @@
 
-var socket = io.connect();
+var socket = io.connect(window.location.hostname);
 
 var msg=document.getElementById('msg');
 var innerbox=document.getElementById('innerbox');
