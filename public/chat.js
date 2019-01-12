@@ -1,4 +1,3 @@
-
 var socket = io.connect();
 
 var msg=document.getElementById('msg');
